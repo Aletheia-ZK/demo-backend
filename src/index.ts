@@ -63,19 +63,20 @@ app.post('/login', async (req: Request, res: Response) => {
   const reputationTreeData = await getReputationTreeData();
 
   if (resultIdentity === resultReputation && resultIdentity === true) {
-    // check if roots values match
     if (
       identityTreeData.identityRoot != identityPublicSignals[0] ||
       reputationTreeData.attestation1Root != reputationPublicSignals[0]
     ) {
-      // res.send(401);
+      res.send(401);
+      console.log('Invalid proof');
+    } else {
+      res.send(200);
+      console.log('Verification OK');
     }
-    res.send(200);
-    console.log('Verification OK');
   } else {
     console.log('Invalid proof');
-    // res.send(401);
-    res.send(200);
+    res.send(401);
+    // res.send(200);
   }
 });
 
