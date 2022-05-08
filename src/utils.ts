@@ -30,7 +30,7 @@ export function buildMerkleTree(leaves: string[]) {
 export async function getIdentityTreeData() {
   try {
     const reponse = await axios.get('http://localhost:4000/identitytree');
-    console.log('response: ', reponse);
+    // console.log('response: ', reponse);
 
     const identityLeaves = JSON.parse(reponse.data.identityLeaves);
     const identityRoot = reponse.data.identityRoot;
@@ -48,7 +48,7 @@ export async function getIdentityTreeData() {
 export async function getReputationTreeData() {
   try {
     const reponse = await axios.get('http://localhost:4000/attestation_1');
-    console.log('response: ', reponse);
+    // console.log('response: ', reponse);
     const attestation1Leaves = JSON.parse(reponse.data.attestation1Leaves);
     const attestation1Root = reponse.data['attestation_1_root'];
 

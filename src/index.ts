@@ -1,7 +1,5 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
-import ethers from 'ethers';
-import fs from 'fs';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import { plonk } from 'snarkjs';
@@ -11,13 +9,9 @@ import { plonk } from 'snarkjs';
 import dotenv from 'dotenv';
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
-import aletheiaArtifact from '../artifacts/contracts/Aletheia.sol/Aletheia.json';
 import reputationVkey from './ReputationTree_verification_key.json';
 import identityVkey from './IdentityTree_verification_key.json';
 import { getIdentityTreeData, getReputationTreeData } from './utils';
-
-const ALETHEIA_CONTRACT_ADDRESS = process.env.ALETHEIA_CONTRACT_ADDRESS!;
-const PROVIDER_URL = process.env.PROVIDER_URL!;
 
 const app: Express = express();
 app.use(cors());
@@ -39,7 +33,7 @@ app.post('/login', async (req: Request, res: Response) => {
   const reputationProof = req.body.reputationProof;
   const reputationPublicSignals = req.body.reputationPublicSignals;
 
-  console.log(req.body);
+  // console.log(req.body);
 
   // verify reputation proof
   const resultReputation = await plonk.verify(
@@ -61,6 +55,15 @@ app.post('/login', async (req: Request, res: Response) => {
   //
   const identityTreeData = await getIdentityTreeData();
   const reputationTreeData = await getReputationTreeData();
+
+  console.log('Identity Tree Data: ', identityTreeData);
+  console.log('Reputation Tree Data: ', reputationTreeData);
+
+  console.log('proof results:', resultIdentity, resultReputation);
+  console.log(identityTreeData.identityRoot, identityPublicSignals[0]);
+  console.log(reputationTreeData.attestation1Root, reputationPublicSignals[0]);
+
+  console.log(identityProof);
 
   if (resultIdentity === resultReputation && resultIdentity === true) {
     if (
