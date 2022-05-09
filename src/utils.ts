@@ -45,16 +45,18 @@ export async function getIdentityTreeData() {
   }
 }
 
-export async function getReputationTreeData() {
+export async function getReputationTreeData(id: number) {
   try {
-    const reponse = await axios.get('http://localhost:4000/attestation_1');
-    // console.log('response: ', reponse);
-    const attestation1Leaves = JSON.parse(reponse.data.attestation1Leaves);
-    const attestation1Root = reponse.data['attestation_1_root'];
+    const reponse = await axios.get(`http://localhost:4000/attestation_${id}`);
+    const attestationLeaves = JSON.parse(
+      reponse.data[`attestation_${id}_leaves`]
+    );
+    const attestationRoot = reponse.data[`attestation_${id}_root`];
+    console.log(attestationRoot);
 
     return {
-      attestation1Leaves,
-      attestation1Root,
+      attestationLeaves,
+      attestationRoot,
     };
   } catch (error) {
     console.log(error);

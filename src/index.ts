@@ -32,6 +32,7 @@ app.post('/login', async (req: Request, res: Response) => {
   const identityPublicSignals = req.body.identityPublicSignals;
   const reputationProof = req.body.reputationProof;
   const reputationPublicSignals = req.body.reputationPublicSignals;
+  const reputationId = req.body.reputationId;
 
   // console.log(req.body);
 
@@ -54,32 +55,31 @@ app.post('/login', async (req: Request, res: Response) => {
 
   //
   const identityTreeData = await getIdentityTreeData();
-  const reputationTreeData = await getReputationTreeData();
+  const reputationTreeData = await getReputationTreeData(reputationId);
 
   console.log('Identity Tree Data: ', identityTreeData);
   console.log('Reputation Tree Data: ', reputationTreeData);
 
   console.log('proof results:', resultIdentity, resultReputation);
   console.log(identityTreeData.identityRoot, identityPublicSignals[0]);
-  console.log(reputationTreeData.attestation1Root, reputationPublicSignals[0]);
-
-  console.log(identityProof);
+  console.log(reputationTreeData.attestationRoot, reputationPublicSignals[0]);
 
   if (resultIdentity === resultReputation && resultIdentity === true) {
     if (
       identityTreeData.identityRoot != identityPublicSignals[0] ||
-      reputationTreeData.attestation1Root != reputationPublicSignals[0]
+      reputationTreeData.attestationRoot != reputationPublicSignals[0]
     ) {
-      res.send(401);
+      res.status(401).json({ error: 'Invalid proof' });
       console.log('Invalid proof');
     } else {
-      res.send(200);
+      res.status(200).json({
+        reputationId: reputationId,
+        authToken: reputationPublicSignals[1],
+      });
       console.log('Verification OK');
     }
   } else {
-    console.log('Invalid proof');
-    res.send(401);
-    // res.send(200);
+    res.status(401).json({ error: 'Invalid proof' });
   }
 });
 
