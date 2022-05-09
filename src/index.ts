@@ -17,16 +17,6 @@ const app: Express = express();
 app.use(cors());
 app.use(express.json());
 
-// function getContract() {
-//   const provider = new ethers.providers.JsonRpcProvider(PROVIDER_URL);
-//   const contract = new ethers.Contract(
-//     ALETHEIA_CONTRACT_ADDRESS,
-//     aletheiaArtifact['abi'],
-//     provider
-//   );
-//   return contract;
-// }
-
 app.post('/login', async (req: Request, res: Response) => {
   const identityProof = req.body.identityProof;
   const identityPublicSignals = req.body.identityPublicSignals;
