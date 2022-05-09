@@ -11,6 +11,8 @@ const MERKLE_TREE_HEIGHT = parseInt(
   process.env.MERKLE_TREE_HEIGHT!
 );
 
+const RELAYER_URL = process.env.RELAYER_URL;
+
 export function buildMerkleTree(leaves: string[]) {
   console.log(leaves);
   const tree = new IncrementalMerkleTree(poseidon, MERKLE_TREE_HEIGHT, 0, 2);
@@ -24,7 +26,7 @@ export function buildMerkleTree(leaves: string[]) {
 
 export async function getIdentityTreeData() {
   try {
-    const reponse = await axios.get('http://localhost:4000/identitytree');
+    const reponse = await axios.get(RELAYER_URL + 'identitytree');
     // console.log('response: ', reponse);
 
     const identityLeaves = JSON.parse(reponse.data.identityLeaves);
@@ -42,7 +44,7 @@ export async function getIdentityTreeData() {
 
 export async function getReputationTreeData(id: number) {
   try {
-    const reponse = await axios.get(`http://localhost:4000/attestation_${id}`);
+    const reponse = await axios.get(RELAYER_URL + `attestation_${id}`);
     const attestationLeaves = JSON.parse(
       reponse.data[`attestation_${id}_leaves`]
     );
