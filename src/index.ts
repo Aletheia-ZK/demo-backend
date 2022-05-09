@@ -73,5 +73,10 @@ app.post('/login', async (req: Request, res: Response) => {
   }
 });
 
+app.get('/alive', async (req: Request, res: Response) => {
+  console.log('alive request');
+  res.send('alive');
+});
+
 console.log('Listening on port 5000');
 app.listen(5000);

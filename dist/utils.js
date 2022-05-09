@@ -23,6 +23,7 @@ dotenv_1.default.config({ path: `.env.${process.env.NODE_ENV}` });
 const MERKLE_TREE_HEIGHT = parseInt(
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 process.env.MERKLE_TREE_HEIGHT);
+const RELAYER_URL = process.env.RELAYER_URL;
 function buildMerkleTree(leaves) {
     console.log(leaves);
     const tree = new incremental_merkle_tree_1.IncrementalMerkleTree(circomlibjs_1.poseidon, MERKLE_TREE_HEIGHT, 0, 2);
@@ -35,7 +36,7 @@ exports.buildMerkleTree = buildMerkleTree;
 function getIdentityTreeData() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const reponse = yield axios_1.default.get('http://localhost:4000/identitytree');
+            const reponse = yield axios_1.default.get(RELAYER_URL + 'identitytree');
             // console.log('response: ', reponse);
             const identityLeaves = JSON.parse(reponse.data.identityLeaves);
             const identityRoot = reponse.data.identityRoot;
@@ -54,7 +55,7 @@ exports.getIdentityTreeData = getIdentityTreeData;
 function getReputationTreeData(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const reponse = yield axios_1.default.get(`http://localhost:4000/attestation_${id}`);
+            const reponse = yield axios_1.default.get(RELAYER_URL + `attestation_${id}`);
             const attestationLeaves = JSON.parse(reponse.data[`attestation_${id}_leaves`]);
             const attestationRoot = reponse.data[`attestation_${id}_root`];
             console.log(attestationRoot);

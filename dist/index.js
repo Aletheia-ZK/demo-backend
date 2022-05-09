@@ -67,5 +67,9 @@ app.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(401).json({ error: 'Invalid proof' });
     }
 }));
+app.get('/alive', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('alive request');
+    res.send('alive');
+}));
 console.log('Listening on port 5000');
 app.listen(5000);
